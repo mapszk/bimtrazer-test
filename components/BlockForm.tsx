@@ -4,6 +4,7 @@ import { IBlock } from "@/interfaces/Block";
 import Input from "./Input";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { createBlock, editBlock } from "@/services/Block";
 
 interface Props {
   block?: IBlock;
@@ -13,13 +14,28 @@ export default function BlockForm({ block }: Props) {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const submit = (evt: React.FormEvent) => {
+  const submit = async (evt: React.FormEvent) => {
     evt.preventDefault();
     if (!description) return toast.error("Ingrese una descripción");
     if (!startDate) return toast.error("Ingrese una fecha de inicio");
     if (!endDate) return toast.error("Ingrese una fecha de fin");
-    console.log(description, startDate, endDate);
+    try {
+      setLoading(true);
+      const res = block?.id
+        ? await editBlock({ ...block, description, startDate, endDate })
+        : await createBlock(description, startDate, endDate);
+      if (!res.ok) throw new Error();
+      toast.success("Bloque creado con éxito");
+      setDescription("");
+      setStartDate("");
+      setEndDate("");
+    } catch (err) {
+      toast.error("Ha ocurrido un error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
