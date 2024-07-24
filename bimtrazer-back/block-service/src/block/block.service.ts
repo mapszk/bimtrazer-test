@@ -27,7 +27,6 @@ export class BlockService {
   }
 
   async update(id: string, updateBlockDto: UpdateBlockDto) {
-    console.log(id);
     await this.blockModel.findByIdAndUpdate(id, updateBlockDto);
     return this.findOne(id);
   }

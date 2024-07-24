@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { BlockService } from './block.service';
 import { CreateBlockDto } from './dto/create-block.dto';
 import { UpdateBlockDto } from './dto/update-block.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('block')
+@UseGuards(AuthGuard)
 export class BlockController {
   constructor(private readonly blockService: BlockService) {}
 
