@@ -1,20 +1,16 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { BlockModule } from './block/block.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { configLoader } from './config/config.loader';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'BlockService',
-        transport: Transport.TCP,
-        options: {
-          host: '127.0.0.1',
-          port: 8888,
-        },
-      },
-    ]),
     BlockModule,
+    AuthModule,
+    ConfigModule.forRoot({
+      load: [configLoader],
+    }),
   ],
 })
 export class AppModule {}
