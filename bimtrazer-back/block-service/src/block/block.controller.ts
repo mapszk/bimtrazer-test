@@ -8,28 +8,28 @@ import { UpdateBlockDto } from './dto/update-block.dto';
 export class BlockController {
   constructor(private readonly blockService: BlockService) {}
 
-  @MessagePattern('createBlock')
+  @MessagePattern({ cmd: 'createBlock' })
   create(@Payload() createBlockDto: CreateBlockDto) {
     return this.blockService.create(createBlockDto);
   }
 
-  @MessagePattern('findAllBlock')
+  @MessagePattern({ cmd: 'findAllBlock' })
   findAll() {
     return this.blockService.findAll();
   }
 
-  @MessagePattern('findOneBlock')
+  @MessagePattern({ cmd: 'findOneBlock' })
   findOne(@Payload() id: string) {
     return this.blockService.findOne(id);
   }
 
-  @MessagePattern('updateBlock')
+  @MessagePattern({ cmd: 'updateBlock' })
   update(@Payload() updateBlockDto: UpdateBlockDto) {
     return this.blockService.update(updateBlockDto.id, updateBlockDto);
   }
 
-  @MessagePattern('removeBlock')
+  @MessagePattern({ cmd: 'removeBlock' })
   remove(@Payload() id: string) {
-    return this.blockService.remove(id);
+    this.blockService.remove(id);
   }
 }

@@ -1,6 +1,7 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+@Schema()
 export class Block extends Document {
   @Prop({ maxlength: 40, unique: true, immutable: true })
   description: string;

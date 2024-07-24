@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
+import { BlockService } from './block.service';
+import { BlockController } from './block.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { BlockModule } from './block/block.module';
 
 @Module({
+  controllers: [BlockController],
+  providers: [BlockService],
   imports: [
     ClientsModule.register([
       {
@@ -14,7 +17,6 @@ import { BlockModule } from './block/block.module';
         },
       },
     ]),
-    BlockModule,
   ],
 })
-export class AppModule {}
+export class BlockModule {}
