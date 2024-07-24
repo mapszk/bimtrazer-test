@@ -19,7 +19,7 @@ export class BlockController {
   }
 
   @MessagePattern('findOneBlock')
-  findOne(@Payload() id: number) {
+  findOne(@Payload() id: string) {
     return this.blockService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class BlockController {
   }
 
   @MessagePattern('removeBlock')
-  remove(@Payload() id: number) {
+  remove(@Payload() id: string) {
     return this.blockService.remove(id);
   }
 }

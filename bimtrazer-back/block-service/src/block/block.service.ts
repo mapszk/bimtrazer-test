@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBlockDto } from './dto/create-block.dto';
 import { UpdateBlockDto } from './dto/update-block.dto';
+import { isValidObjectId, Model } from 'mongoose';
+import { Block } from './entities/block.entity';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class BlockService {
-  create(createBlockDto: CreateBlockDto) {
-    return 'This action adds a new block';
+  constructor(
+    @InjectModel(Block.name) private readonly blockModel: Model<Block>,
+  ) {}
+
+  async create(createBlockDto: CreateBlockDto) {
+    const pokemon = await this.blockModel.create(createBlockDto);
+    return pokemon;
   }
 
-  findAll() {
-    return `This action returns all block`;
+  async findAll() {
+    return this.blockModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} block`;
+  async findOne(id: string) {
+    if (!isValidObjectId(id))
+      throw new BadRequestException(`Id ${id} is not a valid id`);
+    const pokemon = await this.blockModel.findById(id);
+    if (!pokemon) throw new NotFoundException(`Block with id ${id} not found`);
+    return pokemon;
   }
 
-  update(id: string, updateBlockDto: UpdateBlockDto) {
-    return `This action updates a #${id} block`;
+  async update(id: string, updateBlockDto: UpdateBlockDto) {
+    await this.blockModel.findByIdAndUpdate(id, updateBlockDto);
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} block`;
+  async remove(id: string) {
+    await this.findOne(id);
+    await this.blockModel.findByIdAndDelete(id);
   }
 }
