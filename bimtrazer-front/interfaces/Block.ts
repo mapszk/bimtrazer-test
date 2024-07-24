@@ -1,5 +1,5 @@
 export interface IBlock {
-  id: string;
+  _id: string;
   description: string;
   startDate: string;
   endDate: string;

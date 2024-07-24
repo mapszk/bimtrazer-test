@@ -10,7 +10,7 @@ export default function BlockCard({ block }: Props) {
 
   return (
     <Link
-      href={`/edit/${block.id}`}
+      href={`/edit/${block._id}`}
       className="h-44 flex flex-col shadow-md p-4 gap-2 rounded-lg"
     >
       <p title={block.description} className="line-clamp-2">

@@ -2,7 +2,7 @@
 
 import { IBlock } from "@/interfaces/Block";
 import Input from "./Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { createBlock, editBlock } from "@/services/Block";
 
@@ -11,6 +11,7 @@ interface Props {
 }
 
 export default function BlockForm({ block }: Props) {
+  const edition = block?._id;
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -41,11 +42,21 @@ export default function BlockForm({ block }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (block) {
+      setDescription(block.description);
+      setStartDate(block.startDate);
+      setEndDate(block.endDate);
+      setProgress(block.progress.toString());
+    }
+  }, []);
+
   return (
     <form onSubmit={submit} className="flex flex-col gap-6">
       <Input
         label="Descripción"
         name="description"
+        disabled={Boolean(edition)}
         placeholder="Descripción"
         value={description}
         onChange={(value) => setDescription(value)}
@@ -74,13 +85,24 @@ export default function BlockForm({ block }: Props) {
         value={endDate}
         onChange={(value) => setEndDate(value)}
       />
-      <button
-        className="self-end bg-blue-500 h-12 min-w-32 px-6 rounded-lg text-white"
-        type="submit"
-        disabled={loading}
-      >
-        Crear
-      </button>
+      <div className="flex items-center justify-between">
+        {edition && (
+          <button
+            className="self-end bg-red-500 h-12 min-w-32 px-6 rounded-lg text-white"
+            type="submit"
+            disabled={loading}
+          >
+            Eliminar
+          </button>
+        )}
+        <button
+          className="ml-auto bg-blue-500 h-12 min-w-32 px-6 rounded-lg text-white"
+          type="submit"
+          disabled={loading}
+        >
+          {edition ? "Guardar cambios" : "Crear"}
+        </button>
+      </div>
     </form>
   );
 }

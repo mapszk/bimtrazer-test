@@ -11,7 +11,6 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${cookies().get("access_token")?.value}`,
       },
     });
-    console.log(res.statusText);
     if (!res.ok) {
       return Response.json({ error: res.statusText }, { status: 500 });
     }

@@ -27,7 +27,7 @@ export default async function Blocks() {
       <Container>
         <div className="grid grid-cols-3 gap-8">
           {blocks.map((bl: IBlock) => (
-            <BlockCard block={bl} key={bl.id} />
+            <BlockCard block={bl} key={bl._id} />
           ))}
         </div>
       </Container>
