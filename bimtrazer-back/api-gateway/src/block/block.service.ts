@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateBlockDto } from './dto/create-block.dto';
 import { UpdateBlockDto } from './dto/update-block.dto';
 import { ClientProxy } from '@nestjs/microservices';
@@ -9,33 +9,55 @@ export class BlockService {
     @Inject('BlockService') private readonly clientBlockService: ClientProxy,
   ) {}
 
-  create(createBlockDto: CreateBlockDto) {
-    const pattern = { cmd: 'createBlock' };
-    const payload = createBlockDto;
-    return this.clientBlockService.send(pattern, payload);
+  async create(createBlockDto: CreateBlockDto) {
+    try {
+      const pattern = { cmd: 'createBlock' };
+      const payload = createBlockDto;
+      const result = await this.clientBlockService
+        .send(pattern, payload)
+        .toPromise();
+      console.log(result);
+      return result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   findAll() {
     const pattern = { cmd: 'findAllBlock' };
     const payload = {};
-    return this.clientBlockService.send(pattern, payload);
+    return this.clientBlockService.send(pattern, payload).toPromise();
   }
 
-  findOne(id: string) {
-    const pattern = { cmd: 'findOneBlock' };
-    const payload = id;
-    return this.clientBlockService.send(pattern, payload);
+  async findOne(id: string) {
+    try {
+      const pattern = { cmd: 'findOneBlock' };
+      const payload = id;
+      const result = await this.clientBlockService
+        .send(pattern, payload)
+        .toPromise();
+      return result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
-  update(id: string, updateBlockDto: UpdateBlockDto) {
-    const pattern = { cmd: 'updateBlock' };
-    const payload = { ...updateBlockDto, id };
-    return this.clientBlockService.send(pattern, payload);
+  async update(id: string, updateBlockDto: UpdateBlockDto) {
+    try {
+      const pattern = { cmd: 'updateBlock' };
+      const payload = { ...updateBlockDto, id };
+      const result = await this.clientBlockService
+        .send(pattern, payload)
+        .toPromise();
+      return result;
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   remove(id: string) {
     const pattern = { cmd: 'removeBlock' };
     const payload = id;
-    return this.clientBlockService.send(pattern, payload);
+    return this.clientBlockService.send(pattern, payload).toPromise();
   }
 }

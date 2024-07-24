@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateBlockDto } from './dto/create-block.dto';
 import { UpdateBlockDto } from './dto/update-block.dto';
-import { Model } from 'mongoose';
+import { isValidObjectId, Model } from 'mongoose';
 import { Block } from './entities/block.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { mongoErrorCodes } from 'utils/mongo';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class BlockService {
@@ -12,8 +14,18 @@ export class BlockService {
   ) {}
 
   async create(createBlockDto: CreateBlockDto) {
-    const block = await this.blockModel.create(createBlockDto);
-    return block;
+    try {
+      const block = await this.blockModel.create(createBlockDto);
+      return block;
+    } catch (error) {
+      if (error.code === mongoErrorCodes.duplicateKey) {
+        const keyName = Object.keys(error.keyPattern)[0];
+        throw new RpcException(
+          `Block with ${keyName} ${createBlockDto[keyName]} already exists`,
+        );
+      }
+      throw new RpcException('Internal Server Error');
+    }
   }
 
   async findAll() {
@@ -21,14 +33,26 @@ export class BlockService {
   }
 
   async findOne(id: string) {
+    if (!isValidObjectId(id))
+      throw new RpcException(`Id ${id} is not a valid id`);
     const block = await this.blockModel.findById(id);
-    if (!block) throw new NotFoundException(`Block with id ${id} not found`);
+    if (!block) throw new RpcException(`Block with id ${id} not found`);
     return block;
   }
 
   async update(id: string, updateBlockDto: UpdateBlockDto) {
-    await this.blockModel.findByIdAndUpdate(id, updateBlockDto);
-    return this.findOne(id);
+    try {
+      await this.blockModel.findByIdAndUpdate(id, updateBlockDto);
+      return this.findOne(id);
+    } catch (error) {
+      if (error.code === mongoErrorCodes.duplicateKey) {
+        const keyName = Object.keys(error.keyPattern)[0];
+        throw new RpcException(
+          `Block with ${keyName} ${updateBlockDto[keyName]} already exists`,
+        );
+      }
+      throw new RpcException('Internal Server Error');
+    }
   }
 
   async remove(id: string) {
