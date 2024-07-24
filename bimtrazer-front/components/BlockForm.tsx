@@ -4,7 +4,8 @@ import { IBlock } from "@/interfaces/Block";
 import Input from "./Input";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { createBlock, editBlock } from "@/services/Block";
+import { createBlock, deleteBlock, editBlock } from "@/services/Block";
+import { useRouter } from "next/navigation";
 
 interface Props {
   block?: IBlock;
@@ -12,6 +13,7 @@ interface Props {
 
 export default function BlockForm({ block }: Props) {
   const edition = block?._id;
+  const router = useRouter();
   const [description, setDescription] = useState("");
   const [progress, setProgress] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -54,6 +56,19 @@ export default function BlockForm({ block }: Props) {
         setEndDate("");
         setProgress("");
       }
+    } catch (err) {
+      toast.error("Ha ocurrido un error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const res = await deleteBlock(block?._id as string);
+      if (!res.ok) throw new Error();
+      router.push("/blocks");
     } catch (err) {
       toast.error("Ha ocurrido un error");
     } finally {
@@ -107,6 +122,7 @@ export default function BlockForm({ block }: Props) {
       <div className="flex items-center justify-between">
         {edition && (
           <button
+            onClick={handleDelete}
             className="self-end bg-red-500 h-12 min-w-32 px-6 rounded-lg text-white"
             type="submit"
             disabled={loading}

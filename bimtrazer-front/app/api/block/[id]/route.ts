@@ -22,3 +22,24 @@ export async function PATCH(request: Request) {
     return Response.json({ error }, { status: 500 });
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const res = await fetch(
+      "http://localhost:3000/block/" + request.url.split("/").pop(),
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookies().get("access_token")?.value}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      return Response.json({ error: res.statusText }, { status: 500 });
+    }
+    return Response.json({ success: true }, { status: 200 });
+  } catch (error) {
+    return Response.json({ error }, { status: 500 });
+  }
+}

@@ -32,3 +32,6 @@ export const editBlock = (block: IBlock) =>
       "Content-Type": "application/json",
     },
   });
+
+export const deleteBlock = (id: string) =>
+  fetch("/api/block/" + id, { method: "DELETE" });
