@@ -1,10 +1,13 @@
 import BlockForm from "@/components/BlockForm";
 import Container from "@/components/Container";
+import LoggedLayout from "@/layouts/LoggedLayout";
 
 export default function Blocks() {
   return (
-    <Container>
-      <BlockForm />
-    </Container>
+    <LoggedLayout>
+      <Container>
+        <BlockForm />
+      </Container>
+    </LoggedLayout>
   );
 }

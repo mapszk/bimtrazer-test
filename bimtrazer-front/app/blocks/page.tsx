@@ -1,6 +1,7 @@
 import BlockCard from "@/components/Block";
 import Container from "@/components/Container";
 import { IBlock } from "@/interfaces/Block";
+import LoggedLayout from "@/layouts/LoggedLayout";
 
 const blocks: IBlock[] = [
   {
@@ -43,12 +44,14 @@ const blocks: IBlock[] = [
 
 export default function Blocks() {
   return (
-    <Container>
-      <div className="grid grid-cols-3 gap-8">
-        {blocks.map((bl) => (
-          <BlockCard block={bl} key={bl.id} />
-        ))}
-      </div>
-    </Container>
+    <LoggedLayout>
+      <Container>
+        <div className="grid grid-cols-3 gap-8">
+          {blocks.map((bl) => (
+            <BlockCard block={bl} key={bl.id} />
+          ))}
+        </div>
+      </Container>
+    </LoggedLayout>
   );
 }

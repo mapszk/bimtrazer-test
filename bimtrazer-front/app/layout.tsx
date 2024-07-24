@@ -15,12 +15,12 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  params: any;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <Toaster position="bottom-center" />
-        <Navbar />
         {children}
       </body>
     </html>
