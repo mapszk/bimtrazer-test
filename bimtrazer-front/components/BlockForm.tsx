@@ -24,17 +24,36 @@ export default function BlockForm({ block }: Props) {
     if (!progress) return toast.error("Ingrese un progreso");
     if (!startDate) return toast.error("Ingrese una fecha de inicio");
     if (!endDate) return toast.error("Ingrese una fecha de fin");
+    if (Number(progress) > 100 || Number(progress) < 0)
+      return toast.error("El progreso debe estar entre 0 y 100");
+    if (Number(progress) < Number(block?.progress))
+      return toast.error("El progreso no puede reducirse");
+    if (new Date(startDate).getTime() >= new Date(endDate).getTime())
+      return toast.error(
+        "La fecha de inicio no puede ser posterior a la de fin"
+      );
+
     try {
       setLoading(true);
-      const res = block?.id
-        ? await editBlock({ ...block, description, startDate, endDate })
+      const res = block?._id
+        ? await editBlock({
+            ...block,
+            progress: Number(progress),
+            startDate,
+            endDate,
+          })
         : await createBlock(description, startDate, endDate, Number(progress));
       if (!res.ok) throw new Error();
-      toast.success("Bloque creado con éxito");
-      setDescription("");
-      setStartDate("");
-      setEndDate("");
-      setProgress("");
+
+      if (edition) {
+        toast.success("Bloque editado con éxito");
+      } else {
+        toast.success("Bloque creado con éxito");
+        setDescription("");
+        setStartDate("");
+        setEndDate("");
+        setProgress("");
+      }
     } catch (err) {
       toast.error("Ha ocurrido un error");
     } finally {
@@ -45,8 +64,8 @@ export default function BlockForm({ block }: Props) {
   useEffect(() => {
     if (block) {
       setDescription(block.description);
-      setStartDate(block.startDate);
-      setEndDate(block.endDate);
+      setStartDate(block.startDate.substring(0, 10));
+      setEndDate(block.endDate.substring(0, 10));
       setProgress(block.progress.toString());
     }
   }, []);

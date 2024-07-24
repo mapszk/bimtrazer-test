@@ -20,10 +20,11 @@ export const createBlock = (
   });
 
 export const editBlock = (block: IBlock) =>
-  fetch("/api/block/" + block.id, {
+  fetch("/api/block/" + block._id, {
     method: "PATCH",
     body: JSON.stringify({
-      description: block.description,
+      progress: block.progress,
+      id: block._id,
       startDate: new Date(block.startDate).toISOString(),
       endDate: new Date(block.endDate).toISOString(),
     }),
