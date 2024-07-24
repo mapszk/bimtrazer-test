@@ -12,6 +12,7 @@ interface Props {
 
 export default function BlockForm({ block }: Props) {
   const [description, setDescription] = useState("");
+  const [progress, setProgress] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,18 +20,20 @@ export default function BlockForm({ block }: Props) {
   const submit = async (evt: React.FormEvent) => {
     evt.preventDefault();
     if (!description) return toast.error("Ingrese una descripción");
+    if (!progress) return toast.error("Ingrese un progreso");
     if (!startDate) return toast.error("Ingrese una fecha de inicio");
     if (!endDate) return toast.error("Ingrese una fecha de fin");
     try {
       setLoading(true);
       const res = block?.id
         ? await editBlock({ ...block, description, startDate, endDate })
-        : await createBlock(description, startDate, endDate);
+        : await createBlock(description, startDate, endDate, Number(progress));
       if (!res.ok) throw new Error();
       toast.success("Bloque creado con éxito");
       setDescription("");
       setStartDate("");
       setEndDate("");
+      setProgress("");
     } catch (err) {
       toast.error("Ha ocurrido un error");
     } finally {
@@ -46,6 +49,14 @@ export default function BlockForm({ block }: Props) {
         placeholder="Descripción"
         value={description}
         onChange={(value) => setDescription(value)}
+      />
+      <Input
+        label="Progreso"
+        name="progress"
+        placeholder="Progreso"
+        value={progress}
+        type="number"
+        onChange={(value) => setProgress(value)}
       />
       <Input
         label="Inicio"
