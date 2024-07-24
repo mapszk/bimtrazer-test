@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Container from "./Container";
+import SignOutButton from "./SignOutButton";
 
 export default function Navbar() {
   return (
@@ -7,7 +8,7 @@ export default function Navbar() {
       <nav className="shadow-md rounded-lg flex gap-6 items-center p-4 px-6 my-4 mb-8">
         <Link href="/blocks">Blocks</Link>
         <Link href="/create">New block</Link>
-        <button className="ml-auto">Log out</button>
+        <SignOutButton className="ml-auto" />
       </nav>
     </Container>
   );

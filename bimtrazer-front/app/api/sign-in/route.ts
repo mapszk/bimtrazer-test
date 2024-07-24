@@ -1,10 +1,16 @@
+import { cookies } from "next/headers";
+
 export async function POST() {
   try {
-    const res = await fetch("/api/auth", { method: "POST" });
+    const res = await fetch("http://localhost:3000/auth/sign-in", {
+      method: "POST",
+    });
     if (!res.ok) {
       return Response.json({ error: res.statusText }, { status: 500 });
     }
-    return Response.json({ ...res.json() }, { status: 200 });
+    const { access_token } = await res.json();
+    cookies().set("access_token", access_token);
+    return Response.json({ success: true }, { status: 200 });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

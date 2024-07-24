@@ -66,6 +66,7 @@ export default function BlockForm({ block }: Props) {
       <button
         className="self-end bg-blue-500 h-12 min-w-32 px-6 rounded-lg text-white"
         type="submit"
+        disabled={loading}
       >
         Crear
       </button>
