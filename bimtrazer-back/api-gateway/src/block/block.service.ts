@@ -16,7 +16,6 @@ export class BlockService {
       const result = await this.clientBlockService
         .send(pattern, payload)
         .toPromise();
-      console.log(result);
       return result;
     } catch (err) {
       throw new BadRequestException(err);

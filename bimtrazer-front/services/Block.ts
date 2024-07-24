@@ -1,11 +1,12 @@
 import { IBlock } from "@/interfaces/Block";
+import { cookies } from "next/headers";
 
 export const createBlock = (
   description: string,
   startDate: string,
   endDate: string
 ) =>
-  fetch("/api/create", {
+  fetch("/api/block", {
     method: "POST",
     body: JSON.stringify({
       description,
@@ -14,12 +15,13 @@ export const createBlock = (
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${cookies().get("access_token")?.value}`,
     },
   });
 
 export const editBlock = (block: IBlock) =>
-  fetch("/api/edit/" + block.id, {
-    method: "POST",
+  fetch("/api/block/" + block.id, {
+    method: "PATCH",
     body: JSON.stringify({
       description: block.description,
       startDate: new Date(block.startDate).toISOString(),
@@ -27,5 +29,6 @@ export const editBlock = (block: IBlock) =>
     }),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${cookies().get("access_token")?.value}`,
     },
   });

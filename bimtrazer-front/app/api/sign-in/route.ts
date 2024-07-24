@@ -9,7 +9,10 @@ export async function POST() {
       return Response.json({ error: res.statusText }, { status: 500 });
     }
     const { access_token } = await res.json();
-    cookies().set("access_token", access_token);
+    cookies().set("access_token", access_token, {
+      secure: true,
+      httpOnly: true,
+    });
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {
     return Response.json({ error }, { status: 500 });

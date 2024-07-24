@@ -2,52 +2,31 @@ import BlockCard from "@/components/Block";
 import Container from "@/components/Container";
 import { IBlock } from "@/interfaces/Block";
 import LoggedLayout from "@/layouts/LoggedLayout";
+import { cookies } from "next/headers";
 
-const blocks: IBlock[] = [
-  {
-    id: "6671997cfcac3e0bfbe8607c",
-    description:
-      "SUPER FANCY STAIRS SUPER FANCY STAIRSSUPER FANCY STAIRS SUPER FANCY STAIRS SUPER FANCY STAIRS",
-    startDate: "2024-06-03T00:00:00",
-    endDate: "2024-06-03T23:59:59",
-    progress: 75,
-  },
-  {
-    id: "6671997cfcac34e0bfbe8607c",
-    description: "SUPER FANCY STAIRS",
-    startDate: "2024-06-03T00:00:00",
-    endDate: "2024-06-03T23:59:59",
-    progress: 75,
-  },
-  {
-    id: "6671997cfcac3e03bfbe8607c",
-    description: "SUPER FANCY STAIRS",
-    startDate: "2024-06-03T00:00:00",
-    endDate: "2024-06-03T23:59:59",
-    progress: 75,
-  },
-  {
-    id: "6671997cfcac3e0b2fbe8607c",
-    description: "SUPER FANCY STAIRS",
-    startDate: "2024-06-03T00:00:00",
-    endDate: "2024-06-03T23:59:59",
-    progress: 75,
-  },
-  {
-    id: "6671997cfcac3e60bfbe8607c",
-    description: "SUPER FANCY STAIRS",
-    startDate: "2024-06-03T00:00:00",
-    endDate: "2024-06-03T23:59:59",
-    progress: 75,
-  },
-];
+const getData = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/block", {
+      headers: {
+        Authorization: `Bearer ${cookies().get("access_token")?.value}`,
+      },
+    });
+    if (!res.ok) throw new Error("Failed to fetch data");
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    throw new Error("Failed to fetch data");
+  }
+};
 
-export default function Blocks() {
+export default async function Blocks() {
+  const blocks = await getData();
+
   return (
     <LoggedLayout>
       <Container>
         <div className="grid grid-cols-3 gap-8">
-          {blocks.map((bl) => (
+          {blocks.map((bl: IBlock) => (
             <BlockCard block={bl} key={bl.id} />
           ))}
         </div>
