@@ -16,7 +16,7 @@ export class BlockService {
     return `This action returns a #${id} block`;
   }
 
-  update(id: number, updateBlockDto: UpdateBlockDto) {
+  update(id: string, updateBlockDto: UpdateBlockDto) {
     return `This action updates a #${id} block`;
   }
 

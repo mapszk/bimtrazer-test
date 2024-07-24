@@ -15,4 +15,4 @@ export class Block extends Document {
   progress: number;
 }
 
-export const PokemonSchema = SchemaFactory.createForClass(Block);
+export const BlockSchema = SchemaFactory.createForClass(Block);
