@@ -8,9 +8,7 @@ import { cookies } from "next/headers";
 export async function getBlocks() {
   const res = await fetch(API_BASE_URL + "/block", {
     method: "GET",
-    next: {
-      tags: ["blocks"],
-    },
+    cache: "no-cache",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${cookies().get("access_token")?.value}`,
@@ -38,7 +36,6 @@ export async function getBlock(id: string) {
 }
 
 export async function createBlock(block: ICreateBlockDTO) {
-  revalidateTag("blocks");
   const { description, progress, startDate, endDate } = block;
   const res = await fetch(API_BASE_URL + "/block", {
     method: "POST",
