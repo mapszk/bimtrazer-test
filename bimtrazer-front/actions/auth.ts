@@ -11,7 +11,7 @@ export async function signIn() {
   const data = await res.json();
   cookies().set("access_token", data.access_token, {
     secure: true,
-    maxAge: 60,
+    maxAge: 120,
   });
   return data;
 }
