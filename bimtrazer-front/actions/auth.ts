@@ -1,9 +1,10 @@
 "use server";
 
+import { API_BASE_URL } from "@/constants/api";
 import { cookies } from "next/headers";
 
 export async function signIn() {
-  return fetch("http://localhost:3000/auth/sign-in", {
+  return fetch(API_BASE_URL + "/auth/sign-in", {
     method: "POST",
   })
     .then(async (res) => {

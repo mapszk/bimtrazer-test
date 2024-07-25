@@ -24,7 +24,10 @@ export default function BlockCard({ block }: Props) {
       </span>
       <div className="flex mt-1 items-center gap-2">
         <div className="rounded-lg overflow-hidden h-1 w-full bg-slate-200">
-          <div className="h-1 bg-blue-500" style={{ width: "45%" }}></div>
+          <div
+            className="h-1 bg-blue-500"
+            style={{ width: `${block.progress}%` }}
+          ></div>
         </div>
         <span className="text-xs">{block.progress}%</span>
       </div>
