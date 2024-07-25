@@ -8,7 +8,9 @@ import { cookies } from "next/headers";
 export async function getBlocks() {
   const res = await fetch(API_BASE_URL + "/block", {
     method: "GET",
-    cache: "no-cache",
+    next: {
+      tags: ["blocks"],
+    },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${cookies().get("access_token")?.value}`,
@@ -36,6 +38,7 @@ export async function getBlock(id: string) {
 }
 
 export async function createBlock(block: ICreateBlockDTO) {
+  revalidateTag("blocks");
   const { description, progress, startDate, endDate } = block;
   const res = await fetch(API_BASE_URL + "/block", {
     method: "POST",
@@ -51,6 +54,7 @@ export async function createBlock(block: ICreateBlockDTO) {
 }
 
 export async function updateBlock(block: IBlock) {
+  revalidateTag("blocks");
   revalidateTag("block");
   const { _id: id, progress, startDate, endDate } = block;
   const res = await fetch(API_BASE_URL + "/block/" + id, {
@@ -67,6 +71,7 @@ export async function updateBlock(block: IBlock) {
 }
 
 export async function deleteBlock(id: string) {
+  revalidateTag("blocks");
   const res = await fetch(API_BASE_URL + "/block/" + id, {
     method: "DELETE",
     headers: {
