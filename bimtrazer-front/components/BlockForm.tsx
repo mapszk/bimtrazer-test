@@ -45,7 +45,8 @@ export default function BlockForm({ block }: Props) {
             endDate,
           })
         : await createBlock(description, startDate, endDate, Number(progress));
-      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
 
       if (edition) {
         toast.success("Bloque editado con éxito");
@@ -56,8 +57,8 @@ export default function BlockForm({ block }: Props) {
         setEndDate("");
         setProgress("");
       }
-    } catch (err) {
-      toast.error("Ha ocurrido un error");
+    } catch (err: any) {
+      toast.error(err.message as string);
     } finally {
       setLoading(false);
     }
@@ -67,10 +68,11 @@ export default function BlockForm({ block }: Props) {
     try {
       setLoading(true);
       const res = await deleteBlock(block?._id as string);
-      if (!res.ok) throw new Error();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
       router.push("/blocks");
-    } catch (err) {
-      toast.error("Ha ocurrido un error");
+    } catch (err: any) {
+      toast.error(err.message as string);
     } finally {
       setLoading(false);
     }
@@ -88,34 +90,34 @@ export default function BlockForm({ block }: Props) {
   return (
     <form onSubmit={submit} className="flex flex-col gap-6">
       <Input
-        label="Descripción"
+        label="Description"
         name="description"
         disabled={Boolean(edition)}
-        placeholder="Descripción"
+        placeholder="Description"
         value={description}
         onChange={(value) => setDescription(value)}
       />
       <Input
-        label="Progreso"
+        label="Progress"
         name="progress"
-        placeholder="Progreso"
+        placeholder="Progress"
         value={progress}
         type="number"
         onChange={(value) => setProgress(value)}
       />
       <Input
-        label="Inicio"
+        label="Start date"
         name="startDate"
         type="date"
-        placeholder="Inicio"
+        placeholder="Start date"
         value={startDate}
         onChange={(value) => setStartDate(value)}
       />
       <Input
-        label="Fin"
+        label="End date"
         name="endDate"
         type="date"
-        placeholder="Fin"
+        placeholder="End date"
         value={endDate}
         onChange={(value) => setEndDate(value)}
       />
@@ -127,7 +129,7 @@ export default function BlockForm({ block }: Props) {
             type="submit"
             disabled={loading}
           >
-            Eliminar
+            Delete
           </button>
         )}
         <button
@@ -135,7 +137,7 @@ export default function BlockForm({ block }: Props) {
           type="submit"
           disabled={loading}
         >
-          {edition ? "Guardar cambios" : "Crear"}
+          {edition ? "Save changes" : "Create"}
         </button>
       </div>
     </form>

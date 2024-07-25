@@ -17,10 +17,10 @@ export default function BlockCard({ block }: Props) {
         {block.description}
       </p>
       <span className="text-sm text-slate-500 mt-auto">
-        Inicio: {formatDate(block.startDate)}
+        Start date: {formatDate(block.startDate)}
       </span>
       <span className="text-sm text-slate-500">
-        Fin: {formatDate(block.endDate)}
+        End date: {formatDate(block.endDate)}
       </span>
       <div className="flex mt-1 items-center gap-2">
         <div className="rounded-lg overflow-hidden h-1 w-full bg-slate-200">

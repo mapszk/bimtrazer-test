@@ -11,10 +11,11 @@ export async function POST(request: Request) {
         Authorization: `Bearer ${cookies().get("access_token")?.value}`,
       },
     });
+    const data = await res.json();
     if (!res.ok) {
-      return Response.json({ error: res.statusText }, { status: 500 });
+      return Response.json(data, { status: res.status });
     }
-    return Response.json({ success: true }, { status: 200 });
+    return Response.json(data, { status: 200 });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

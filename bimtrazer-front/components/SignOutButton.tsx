@@ -35,7 +35,7 @@ export default function SignOutButton({ className }: Props) {
       }
       disabled={loading}
     >
-      Salir
+      Sign out
     </button>
   );
 }
