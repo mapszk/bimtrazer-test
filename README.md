@@ -42,7 +42,7 @@ API_BASE_URL=http://localhost:3000
 Before running the project is necessary to set up the database with the docker-compose file located in /bimtrazer-back:
 
 ```
-cd ./bimtrazer-back
+cd ./bimtrazer-back/block-service
 docker compose up -d
 ```
 
@@ -52,6 +52,9 @@ First start the block service
 
 ```
 cd ./bimtrazer-back/block-service
+
+npm install
+
 npm run start:dev
 ```
 
@@ -59,6 +62,9 @@ Then the API
 
 ```
 cd ./bimtrazer-back/api-gateway
+
+npm install
+
 npm run start:dev
 ```
 
@@ -66,5 +72,12 @@ At last the front-end app
 
 ```
 cd ./bimtrazer-front
+
+npm install
+
 npm run dev
 ```
+
+## Notes
+
+Token is stored in frontend with a max age of 120 seconds, after that session will be ended.
