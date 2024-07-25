@@ -1,11 +1,15 @@
 "use server";
 
 import { IBlock, ICreateBlockDTO } from "@/interfaces/Block";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function getBlocks() {
   const res = await fetch("http://localhost:3000/block", {
     method: "GET",
+    next: {
+      tags: ["blocks"],
+    },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${cookies().get("access_token")?.value}`,
@@ -19,6 +23,9 @@ export async function getBlocks() {
 export async function getBlock(id: string) {
   const res = await fetch("http://localhost:3000/block/" + id, {
     method: "GET",
+    next: {
+      tags: ["block"],
+    },
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${cookies().get("access_token")?.value}`,
@@ -30,6 +37,7 @@ export async function getBlock(id: string) {
 }
 
 export async function createBlock(block: ICreateBlockDTO) {
+  revalidateTag("blocks");
   const { description, progress, startDate, endDate } = block;
   const res = await fetch("http://localhost:3000/block", {
     method: "POST",
@@ -45,6 +53,7 @@ export async function createBlock(block: ICreateBlockDTO) {
 }
 
 export async function updateBlock(block: IBlock) {
+  revalidateTag("block");
   const { _id: id, progress, startDate, endDate } = block;
   const res = await fetch("http://localhost:3000/block/" + id, {
     method: "PATCH",
@@ -60,6 +69,7 @@ export async function updateBlock(block: IBlock) {
 }
 
 export async function deleteBlock(id: string) {
+  revalidateTag("blocks");
   const res = await fetch("http://localhost:3000/block/" + id, {
     method: "DELETE",
     headers: {
