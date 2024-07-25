@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "@/services/Auth";
+import { signOut } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -16,8 +16,7 @@ export default function SignOutButton({ className }: Props) {
   const auth = async () => {
     try {
       setLoading(true);
-      const res = await signOut();
-      if (!res.ok) throw new Error();
+      await signOut();
       toast.success("Logged out");
       router.push("/");
     } catch (err) {

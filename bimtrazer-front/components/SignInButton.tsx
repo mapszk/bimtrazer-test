@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "@/services/Auth";
+import { signIn } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -12,8 +12,7 @@ export default function SignInButton() {
   const auth = async () => {
     try {
       setLoading(true);
-      const res = await signIn();
-      if (!res.ok) throw new Error();
+      await signIn();
       toast.success("Logged in");
       router.push("/blocks");
     } catch (err) {
