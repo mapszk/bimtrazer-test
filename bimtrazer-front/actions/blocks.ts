@@ -69,7 +69,6 @@ export async function updateBlock(block: IBlock) {
 }
 
 export async function deleteBlock(id: string) {
-  revalidateTag("blocks");
   const res = await fetch("http://localhost:3000/block/" + id, {
     method: "DELETE",
     headers: {
@@ -77,7 +76,8 @@ export async function deleteBlock(id: string) {
       Authorization: `Bearer ${cookies().get("access_token")?.value}`,
     },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message);
-  else return data;
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.message);
+  }
 }

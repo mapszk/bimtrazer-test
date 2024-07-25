@@ -35,8 +35,8 @@ export default function BlockForm({ block }: Props) {
       setLoading(true);
       await deleteBlock(block?._id as string);
       router.push("/blocks");
-    } catch (err) {
-      toast.error(err as string);
+    } catch (err: any) {
+      toast.error(err.message as string);
     } finally {
       setLoading(false);
     }
