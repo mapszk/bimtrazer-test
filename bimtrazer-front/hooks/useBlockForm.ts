@@ -53,8 +53,8 @@ export default function useBlockForm({
         setEndDate("");
         setProgress("");
       }
-    } catch (err) {
-      toast.error(err as string);
+    } catch (err: any) {
+      toast.error(err.message as string);
     } finally {
       setLoading(false);
     }
