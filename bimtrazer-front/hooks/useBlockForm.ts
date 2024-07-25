@@ -22,6 +22,9 @@ export default function useBlockForm({
     if (!progress) return toast.error("Progress is required");
     if (!startDate) return toast.error("Start date is required");
     if (!endDate) return toast.error("End date is required");
+
+    if (description.length > 40)
+      return toast.error("Description max length is 40");
     if (Number(progress) > 100 || Number(progress) < 0)
       return toast.error("Progress must be between 0 and 100");
     if (Number(progress) < Number(block?.progress))
