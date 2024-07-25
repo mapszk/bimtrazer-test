@@ -22,18 +22,16 @@ export default function BlockForm({ block }: Props) {
 
   const submit = async (evt: React.FormEvent) => {
     evt.preventDefault();
-    if (!description) return toast.error("Ingrese una descripción");
-    if (!progress) return toast.error("Ingrese un progreso");
-    if (!startDate) return toast.error("Ingrese una fecha de inicio");
-    if (!endDate) return toast.error("Ingrese una fecha de fin");
+    if (!description) return toast.error("Description is required");
+    if (!progress) return toast.error("Progress is required");
+    if (!startDate) return toast.error("Start date is required");
+    if (!endDate) return toast.error("End date is required");
     if (Number(progress) > 100 || Number(progress) < 0)
-      return toast.error("El progreso debe estar entre 0 y 100");
+      return toast.error("Progress must be between 0 and 100");
     if (Number(progress) < Number(block?.progress))
-      return toast.error("El progreso no puede reducirse");
+      return toast.error("Progress cannot be reduced");
     if (new Date(startDate).getTime() >= new Date(endDate).getTime())
-      return toast.error(
-        "La fecha de inicio no puede ser posterior a la de fin"
-      );
+      return toast.error("End date must be greater than start date");
 
     try {
       setLoading(true);
@@ -49,9 +47,9 @@ export default function BlockForm({ block }: Props) {
       if (!res.ok) throw new Error(data.message);
 
       if (edition) {
-        toast.success("Bloque editado con éxito");
+        toast.success("Block edited");
       } else {
-        toast.success("Bloque creado con éxito");
+        toast.success("Block created");
         setDescription("");
         setStartDate("");
         setEndDate("");

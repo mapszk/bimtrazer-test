@@ -18,10 +18,10 @@ export default function SignOutButton({ className }: Props) {
       setLoading(true);
       const res = await signOut();
       if (!res.ok) throw new Error();
-      toast.success("Sesión finalizada");
+      toast.success("Logged out");
       router.push("/");
     } catch (err) {
-      toast.error("Ha ocurrido un error");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

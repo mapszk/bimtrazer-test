@@ -14,10 +14,10 @@ export default function SignInButton() {
       setLoading(true);
       const res = await signIn();
       if (!res.ok) throw new Error();
-      toast.success("Sesión iniciada");
+      toast.success("Logged in");
       router.push("/blocks");
     } catch (err) {
-      toast.error("Ha ocurrido un error");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }
