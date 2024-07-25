@@ -2,75 +2,41 @@
 
 import { IBlock } from "@/interfaces/Block";
 import Input from "./Input";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
-import { createBlock, deleteBlock, editBlock } from "@/services/Block";
 import { useRouter } from "next/navigation";
+import useBlockForm from "@/hooks/useBlockForm";
+import { deleteBlock } from "@/actions/blocks";
 
 interface Props {
   block?: IBlock;
 }
 
 export default function BlockForm({ block }: Props) {
-  const edition = block?._id;
+  const edition = Boolean(block?._id);
   const router = useRouter();
-  const [description, setDescription] = useState("");
-  const [progress, setProgress] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const submit = async (evt: React.FormEvent) => {
-    evt.preventDefault();
-    if (!description) return toast.error("Description is required");
-    if (!progress) return toast.error("Progress is required");
-    if (!startDate) return toast.error("Start date is required");
-    if (!endDate) return toast.error("End date is required");
-    if (Number(progress) > 100 || Number(progress) < 0)
-      return toast.error("Progress must be between 0 and 100");
-    if (Number(progress) < Number(block?.progress))
-      return toast.error("Progress cannot be reduced");
-    if (new Date(startDate).getTime() >= new Date(endDate).getTime())
-      return toast.error("End date must be greater than start date");
-
-    try {
-      setLoading(true);
-      const res = block?._id
-        ? await editBlock({
-            ...block,
-            progress: Number(progress),
-            startDate,
-            endDate,
-          })
-        : await createBlock(description, startDate, endDate, Number(progress));
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-
-      if (edition) {
-        toast.success("Block edited");
-      } else {
-        toast.success("Block created");
-        setDescription("");
-        setStartDate("");
-        setEndDate("");
-        setProgress("");
-      }
-    } catch (err: any) {
-      toast.error(err.message as string);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    description,
+    setDescription,
+    progress,
+    setProgress,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    loading,
+    setLoading,
+    submit,
+  } = useBlockForm({ block, edition });
 
   const handleDelete = async () => {
     try {
       setLoading(true);
-      const res = await deleteBlock(block?._id as string);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
+      await deleteBlock(block?._id as string);
       router.push("/blocks");
-    } catch (err: any) {
-      toast.error(err.message as string);
+    } catch (err) {
+      toast.error(err as string);
     } finally {
       setLoading(false);
     }
