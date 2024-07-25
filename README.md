@@ -1,6 +1,7 @@
 # Bimtrazer Test
 
 My proposal for the Bimtrazer test.
+![image](https://github.com/user-attachments/assets/0269a810-a422-45da-afb2-867d73477ce0)
 
 ## Requirements
 
