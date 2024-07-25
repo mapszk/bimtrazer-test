@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { CreateBlockDto } from './dto/create-block.dto';
 import { UpdateBlockDto } from './dto/update-block.dto';
 import { ClientProxy } from '@nestjs/microservices';
@@ -18,7 +18,7 @@ export class BlockService {
         .toPromise();
       return result;
     } catch (err) {
-      throw new BadRequestException(err);
+      throw new HttpException(err.statusText, err.status);
     }
   }
 
@@ -37,7 +37,7 @@ export class BlockService {
         .toPromise();
       return result;
     } catch (err) {
-      throw new BadRequestException(err);
+      throw new HttpException(err.statusText, err.status);
     }
   }
 
@@ -50,13 +50,20 @@ export class BlockService {
         .toPromise();
       return result;
     } catch (err) {
-      throw new BadRequestException(err);
+      throw new HttpException(err.statusText, err.status);
     }
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     const pattern = { cmd: 'removeBlock' };
     const payload = id;
-    return this.clientBlockService.send(pattern, payload).toPromise();
+    try {
+      const result = await this.clientBlockService
+        .send(pattern, payload)
+        .toPromise();
+      return result;
+    } catch (err) {
+      throw new HttpException(err.statusText, err.status);
+    }
   }
 }

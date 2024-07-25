@@ -20,11 +20,15 @@ export class BlockService {
     } catch (error) {
       if (error.code === mongoErrorCodes.duplicateKey) {
         const keyName = Object.keys(error.keyPattern)[0];
-        throw new RpcException(
-          `Block with ${keyName} ${createBlockDto[keyName]} already exists`,
-        );
+        throw new RpcException({
+          status: 400,
+          statusText: `Block with ${keyName} ${createBlockDto[keyName]} already exists`,
+        });
       }
-      throw new RpcException('Internal Server Error');
+      throw new RpcException({
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
     }
   }
 
@@ -34,9 +38,16 @@ export class BlockService {
 
   async findOne(id: string) {
     if (!isValidObjectId(id))
-      throw new RpcException(`Id ${id} is not a valid id`);
+      throw new RpcException({
+        status: 400,
+        statusText: `Id ${id} is not a valid id`,
+      });
     const block = await this.blockModel.findById(id);
-    if (!block) throw new RpcException(`Block with id ${id} not found`);
+    if (!block)
+      throw new RpcException({
+        status: 404,
+        statusText: `Block with id ${id} not found`,
+      });
     return block;
   }
 
@@ -47,11 +58,15 @@ export class BlockService {
     } catch (error) {
       if (error.code === mongoErrorCodes.duplicateKey) {
         const keyName = Object.keys(error.keyPattern)[0];
-        throw new RpcException(
-          `Block with ${keyName} ${updateBlockDto[keyName]} already exists`,
-        );
+        throw new RpcException({
+          status: 400,
+          statusText: `Block with ${keyName} ${updateBlockDto[keyName]} already exists`,
+        });
       }
-      throw new RpcException('Internal Server Error');
+      throw new RpcException({
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
     }
   }
 
